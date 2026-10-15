@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+<title>AAC Smart Communication Board</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f1f5fb;
+  color: #172554;
+  margin: 0;
+  padding: 14px;
+}
+
+header {
+  background: #173b70;
+  color: white;
+  text-align: center;
+  padding: 18px 10px;
+  border-radius: 18px;
+}
+
+h1 { font-size: 24px; margin: 4px; }
+header p { margin: 8px 0 0; }
+
+h2 { font-size: 19px; }
+
+#sentence {
+  background: white;
+  border: 2px solid #b8cce8;
+  border-radius: 14px;
+  min-height: 85px;
+  padding: 15px;
+  font-size: 22px;
+  margin-top: 14px;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.action {
+  flex: 1;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 6px;
+  font-weight: bold;
+  background: #dce9fb;
+  color: #173b70;
+}
+
+#speak {
+  background: #176b48;
+  color: white;
+}
+
+#status {
+  font-size: 14px;
+  min-height: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tile {
+  min-height: 112px;
+  border: 2px solid #d2deef;
+  border-radius: 15px;
+  background: white;
+  color: #172554;
+  padding: 12px 5px;
+}
+
+.tile:active { background: #dce9fb; }
+
+.symbol {
+  display: block;
+  font-size: 38px;
+  margin-bottom: 8px;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+footer {
+  font-size: 13px;
+  color: #475569;
+  margin-top: 16px;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🗣️ AAC Smart Board</h1>
+  <p>Pilih simbol untuk menyampaikan mesej</p>
+</header>
+
+<h2>Ayat saya</h2>
+<div id="sentence" aria-live="polite">
+  Pilih simbol di bawah
+</div>
+
+<div class="actions">
+  <button class="action" id="speak"
+    onclick="speakSentence()">
+    🔊 CAKAP
+  </button>
+  <button class="action" onclick="undoWord()">
+    ↩️ UNDO
+  </button>
+  <button class="action" onclick="clearSentence()">
+    🗑️ PADAM
+  </button>
+</div>
+
+<p id="status" role="status">
+  Tekan simbol untuk membina ayat.
+</p>
+
+<h2>👋 Perkataan asas</h2>
+<div class="grid">
+  <button class="tile" onclick="addWord('Saya')">
+    <span class="symbol">🙋</span>
+    <span class="label">Saya</span>
+  </button>
+  <button class="tile" onclick="addWord('mahu')">
+    <span class="symbol">👉</span>
+    <span class="label">Mahu</span>
+  </button>
+</div>
+
+<h2>🍎 Keperluan</h2>
+<div class="grid">
+  <button class="tile" onclick="addWord('makan')">
+    <span class="symbol">🍎</span>
+    <span class="label">Makan</span>
+  </button>
+  <button class="tile" onclick="addWord('minum')">
+    <span class="symbol">🥤</span>
+    <span class="label">Minum</span>
+  </button>
+  <button class="tile" onclick="addWord('ke tandas')">
+    <span class="symbol">🚻</span>
+    <span class="label">Tandas</span>
+  </button>
+  <button class="tile" onclick="addWord('rehat')">
+    <span class="symbol">🛏️</span>
+    <span class="label">Rehat</span>
+  </button>
+</div>
+
+<h2>😊 Emosi</h2>
+<div class="grid">
+  <button class="tile" onclick="addWord('gembira')">
+    <span class="symbol">😊</span>
+    <span class="label">Gembira</span>
+  </button>
+  <button class="tile" onclick="addWord('sedih')">
+    <span class="symbol">😢</span>
+    <span class="label">Sedih</span>
+  </button>
+  <button class="tile" onclick="addWord('marah')">
+    <span class="symbol">😠</span>
+    <span class="label">Marah</span>
+  </button>
+  <button class="tile" onclick="addWord('sakit')">
+    <span class="symbol">🤕</span>
+    <span class="label">Sakit</span>
+  </button>
+</div>
+
+<h2>🤝 Komunikasi sosial</h2>
+<div class="grid">
+  <button class="tile" onclick="addWord('tolong saya')">
+    <span class="symbol">🆘</span>
+    <span class="label">Tolong saya</span>
+  </button>
+  <button class="tile" onclick="addWord('terima kasih')">
+    <span class="symbol">🙏</span>
+    <span class="label">Terima kasih</span>
+  </button>
+  <button class="tile" onclick="addWord('saya mahu bermain')">
+    <span class="symbol">⚽</span>
+    <span class="label">Bermain</span>
+  </button>
+  <button class="tile" onclick="addWord('saya tidak mahu')">
+    <span class="symbol">✋</span>
+    <span class="label">Tidak mahu</span>
+  </button>
+</div>
+
+<footer>
+  Produk prototaip AAC DIY untuk menyokong
+  komunikasi murid MBPK.
+</footer>
+
+<script>
+let words = [];
+
+function updateSentence() {
+  document.getElementById("sentence").textContent =
+    words.length ? words.join(" ") :
+    "Pilih simbol di bawah";
+}
+
+function addWord(word) {
+  words.push(word);
+  updateSentence();
+  document.getElementById("status").textContent =
+    "Simbol ditambah.";
+}
+
+function undoWord() {
+  words.pop();
+  updateSentence();
+}
+
+function clearSentence() {
+  words = [];
+  updateSentence();
+  document.getElementById("status").textContent =
+    "Ayat telah dikosongkan.";
+}
+
+function speakSentence() {
+  const status = document.getElementById("status");
+  const text = words.join(" ");
+
+  if (!text) {
+    status.textContent = "Pilih simbol dahulu.";
+    return;
+  }
+
+  if (!("speechSynthesis" in window)) {
+    status.textContent =
+      "Fungsi suara tidak disokong. Cuba Safari atau gunakan suara rakaman.";
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "ms-MY";
+  utterance.rate = 0.85;
+
+  utterance.onstart = function() {
+    status.textContent = "Sedang menyebut ayat...";
+  };
+
+  utterance.onend = function() {
+    status.textContent = "Selesai menyebut ayat.";
+  };
+
+  utterance.onerror = function() {
+    status.textContent =
+      "Suara gagal dimainkan. Semak sokongan suara pada iPad.";
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+</script>
+
+</body>
+</html>
